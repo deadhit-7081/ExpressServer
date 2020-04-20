@@ -4,45 +4,24 @@ const assert = require('assert');
 exports.insertDocument = (db,document,collection,callback) =>
 {
     const coll = db.collection(collection);
-    coll.insert(document,(err,result) => 
-    {
-        assert.equal(err,null);
-
-        //result will have result property and dot n means number of collection
-        console.log("Inserted "+result.result.n +" documents into collection "+ collection);
-        callback(result);
-    });
+    //mongo itself support promise therefore we will return promise directly to avoid callback hell
+    return coll.insert(document);//returning promise and will be handled in index.js
 };
 
 exports.findDocuments = (db,collection,callback) =>
 {
     const coll = db.collection(collection);
-    coll.find({}).toArray((err,docs) =>
-    {
-        assert.equal(err,null);
-        callback(docs);
-    });
+    return coll.find({}).toArray();//returning promise and will be handled in index.js
 };
 
 exports.removeDocument = (db,document,collection,callback) =>
 {
     const coll = db.collection(collection);
-    coll.deleteOne(document,(err,docs) =>
-    {
-        assert.equal(err,null);
-        console.log("Remove the document :",document);
-        callback(result);
-    });
+    return coll.deleteOne(document);
 };
 
 exports.updateDocument = (db,document,update,collection,callback) =>
 {
     const coll = db.collection(collection);
-    coll.updateOne(document,{ $set : update},null,(err,result) =>
-    {
-        assert.equal(err,null);
-
-        console.log("Updated document with :",update);
-        callback(result);
-    });
+    return coll.updateOne(document,{ $set : update},null);
 };
